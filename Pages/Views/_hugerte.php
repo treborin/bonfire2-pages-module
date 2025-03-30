@@ -3,7 +3,7 @@ hugerte.init({
     height: 300,
     menubar: false,
     entity_encoding : 'raw',
-    plugins: 'code link',
+    plugins: 'code link lists',
     setup: function (editor) {
         editor.on('blur', function () {
             htmx.ajax('POST', '<?= $url ?>', { target: '#content_error' });
