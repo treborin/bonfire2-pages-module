@@ -64,7 +64,7 @@ class PagesModel extends Model
             ],
             'slug'     => [
                 'label' => lang('Pages.urlSlug'),
-                'rules' => 'permit_empty|valid_url|is_unique[pages.slug,id,{id}]|min_length[3]|max_length[250]'
+                'rules' => 'permit_empty|alpha_dash|is_unique[pages.slug,id,{id}]|min_length[3]|max_length[250]'
             ],
             'category' => [
                 'label' => lang('Pages.category'),
