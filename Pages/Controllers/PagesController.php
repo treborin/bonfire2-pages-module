@@ -2,15 +2,10 @@
 
 namespace App\Modules\Pages\Controllers;
 
-use CodeIgniter\Controller;
-use CodeIgniter\HTTP\CLIRequest;
-use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
-
 use Bonfire\Core\AdminController;
-use CodeIgniter\I18n\Time;
 use App\Modules\Pages\Entities\Page;
 
 //use CodeIgniter\Database\Exceptions\DataException;
@@ -108,7 +103,7 @@ class PagesController extends AdminController
         if ($page === null) {
             return redirect()->back()->with('error', lang('Bonfire.resourceNotFound', [lang('Pages.page')]));
         }
-		
+
         $this->getHugeRTE();
 
         helper('form');
@@ -153,14 +148,7 @@ class PagesController extends AdminController
         }
 
         /** set the post values to the object */
-        // foreach ($this->request->getPost() as $key => $value) {
-        //     $page->$key = $value;
-        // }
         $page->fill($this->request->getPost());
-
-        /** update slug if needed; should this go into entity? */
-        $page->slug = $this->updateSlug($page->slug, $page->title, ($page->id ?? null));
-        $page->excerpt = mb_substr(strip_tags($page->content), 0, 100) . '...';
 
         $validation = \Config\Services::validation();
 
@@ -255,46 +243,11 @@ class PagesController extends AdminController
         return $validation->getError($fieldName);
     }
 
-
-    // deal with page slug; geterate unique if needed; if it is supplied, do nothing
-    private function updateSlug($inputSlug, $inputTitle, $inputId)
-    {
-        $sep = '-';
-        if (is_null($inputSlug) || empty(trim($inputSlug))) {
-            $pagesModel = model($this->modelPrefix . 'PagesModel');
-            $pgId = $inputId ?? 0;
-            $i = 0;
-            $slug = mb_url_title($inputTitle, $sep, true);
-            $list = $pagesModel->asArray()->select('slug')->like('slug', $slug, 'after')->where('id !=', $pgId)->findAll();
-            $flatList = $this->flattenArray($list, 'slug');
-            // TODO: rewrite with text helper increment_string('file-4') function ?
-            if (in_array($slug, $flatList)) {
-                $i++;
-                while (in_array($slug . $sep . $i, $flatList)) {
-                    $i++;
-                }
-            }
-
-            return $i > 0 ? ($slug . $sep . $i) : $slug;
-        }
-        return $inputSlug;
-    }
-
-    private function flattenArray($array, $key)
-    {
-        $result = array();
-        foreach ($array as $subarray) {
-            $result[] = $subarray[$key];
-        }
-        return $result;
-    }
-
     private function getHugeRTE()
     {
-
         $viewMeta = service('viewMeta');
         $viewMeta->addScript([
-			'src'=> 'https://cdn.jsdelivr.net/npm/hugerte@1/hugerte.min.js',
+            'src' => 'https://cdn.jsdelivr.net/npm/hugerte@1/hugerte.min.js',
             'referrerpolicy' => 'origin'
         ]);
         $script = view('\App\Modules\Pages\Views\_hugerte', [
