@@ -67,10 +67,21 @@ require you to delete the corresponding entries from admin interface and configu
     ];
     ```
 
-6. Copy Pages/Config/Pages.php file to app/Config, in the copied file change the namespace declaration to `Config`
-   and `use` line to `use App\Modules\Pages\Config\Pages;
+6. Copy Pages/Config/Pages.php file to `app/Config`.
+   
+In the copied file change the top part of the file below php tag to: 
 
-7.  To update the database, run this command from the base directory of your Codeigniter install:
+```php 
+namespace Config;
+
+use App\Modules\Pages\Config\Pages as BasePages;
+
+class Pages extends BasePages
+{
+// class content as is
+```
+
+8.  To update the database, run this command from the base directory of your Codeigniter install:
 
     `php spark migrate -n App\\Modules\\Pages --all`
 
