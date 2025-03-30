@@ -17,7 +17,7 @@ class PagesFilter extends PagesModel
      */
     protected $filters = [];
 
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
 
@@ -29,17 +29,17 @@ class PagesFilter extends PagesModel
             ],
             'created_at' => [
                 'title'   => lang('Pages.headingCreated'),
-                'type'    => 'radio', //or 'checkbox'
+                'type'    => 'radio', // or 'checkbox'
                 'options' => [
-                    1   => '1 ' . lang('Pages.labelDay'),
-                    2   => '2 ' . lang('Pages.labelDays'),
-                    3   => '3 ' . lang('Pages.labelDays'),
-                    7   => '1 ' . lang('Pages.labelWeek'),
-                    14  => '2 ' . lang('Pages.labelWeeks'),
-                    30  => '1 ' . lang('Pages.labelMonth'),
-                    90  => '3 ' . lang('Pages.labelMonths'),
-                    180 => '6 ' . lang('Pages.labelMonths'),
-                    365 => '1 ' . lang('Pages.labelYear'),
+                    1     => '1 ' . lang('Pages.labelDay'),
+                    2     => '2 ' . lang('Pages.labelDays'),
+                    3     => '3 ' . lang('Pages.labelDays'),
+                    7     => '1 ' . lang('Pages.labelWeek'),
+                    14    => '2 ' . lang('Pages.labelWeeks'),
+                    30    => '1 ' . lang('Pages.labelMonth'),
+                    90    => '3 ' . lang('Pages.labelMonths'),
+                    180   => '6 ' . lang('Pages.labelMonths'),
+                    365   => '1 ' . lang('Pages.labelYear'),
                     'all' => lang('Pages.labelAnyTime'),
                 ],
             ],
@@ -48,8 +48,6 @@ class PagesFilter extends PagesModel
 
     /**
      * Provides filtering functionality.
-     *
-     * @param array $params
      *
      * @return PagesFilter
      */
@@ -63,8 +61,8 @@ class PagesFilter extends PagesModel
 
         if (
             isset($params['created_at'])
-            && !empty($params['created_at'])
-            && $params['created_at'] != 'all'
+            && ! empty($params['created_at'])
+            && $params['created_at'] !== 'all'
         ) {
             $days = $params['created_at'];
             $this->where('created_at >=', Time::now()->subDays($days)->toDateTimeString());
