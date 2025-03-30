@@ -80,12 +80,13 @@ class Page extends Entity
 
         $existingSlugs = $query->findAll();
         $flatList      = array_column($existingSlugs, 'slug');
-        $i             = 0;
 
-        while (in_array($slug . ($i > 0 ? $sep . $i : ''), $flatList, true)) {
-            $i++;
+        // Use CodeIgniter's increment_string helper to generate a unique slug
+        helper('text');
+        while (in_array($slug, $flatList, true)) {
+            $slug = increment_string($slug, $sep);
         }
 
-        return $i > 0 ? $slug . $sep . $i : $slug;
+        return $slug;
     }
 }
