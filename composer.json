@@ -1,0 +1,16 @@
+{
+    "name": "dgvirtual/bonfire2-pages-module",
+    "description": "A Pages module for Bonfire2",
+    "type": "library",
+    "require": {
+        "codeigniter4/framework": "^4.3",
+        "lonnieezell/bonfire": "dev-develop"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\Modules\\Pages\\": "Pages/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
