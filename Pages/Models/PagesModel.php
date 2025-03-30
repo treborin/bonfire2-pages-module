@@ -6,34 +6,29 @@ use CodeIgniter\Model;
 
 class PagesModel extends Model
 {
-    protected $table      = 'pages';
-    protected $primaryKey = 'id';
-
-    protected $returnType = \App\Modules\Pages\Entities\Page::class; // default array
+    protected $table          = 'pages';
+    protected $primaryKey     = 'id';
+    protected $returnType     = \App\Modules\Pages\Entities\Page::class; // default array
     protected $useSoftDeletes = true;
 
     // should match the categories rule in_list
-    public $pageCategories = [];
-    public $categoriesKeys = [];
-
+    public $pageCategories   = [];
+    public $categoriesKeys   = [];
     protected $allowedFields = [
         'title',
         'content',
         'excerpt',
         'slug',
         'category',
-        'deleted_at'
+        'deleted_at',
     ];
-
-    public $validationRules = [];
-
+    public $validationRules   = [];
     protected $allowCallbacks = true;
     protected $beforeDelete   = ['deleteMeta'];
-
-    protected $useTimestamps = true;
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
-    protected $deleted_at    = 'deleted_at';
+    protected $useTimestamps  = true;
+    protected $createdField   = 'created_at';
+    protected $updatedField   = 'updated_at';
+    protected $deleted_at     = 'deleted_at';
 
     public function __construct()
     {
@@ -47,28 +42,28 @@ class PagesModel extends Model
         $this->categoriesKeys = implode(',', array_keys($this->pageCategories));
 
         $this->validationRules = [
-            'id'    => [
-                'rules' => 'permit_empty|numeric'
+            'id' => [
+                'rules' => 'permit_empty|numeric',
             ],
-            'title'    => [
+            'title' => [
                 'label' => lang('Pages.title'),
-                'rules' => 'required|min_length[10]|max_length[250]'
+                'rules' => 'required|min_length[10]|max_length[250]',
             ],
-            'content'  => [
+            'content' => [
                 'label' => lang('Pages.content'),
-                'rules' => 'required|min_length[100]'
+                'rules' => 'required|min_length[100]',
             ],
             'excerpt' => [
                 'label' => lang('Pages.excerpt'),
-                'rules' => 'required|min_length[10]|max_length[250]'
+                'rules' => 'required|min_length[10]|max_length[250]',
             ],
-            'slug'     => [
+            'slug' => [
                 'label' => lang('Pages.urlSlug'),
-                'rules' => 'permit_empty|alpha_dash|is_unique[pages.slug,id,{id}]|min_length[3]|max_length[250]'
+                'rules' => 'permit_empty|alpha_dash|is_unique[pages.slug,id,{id}]|min_length[3]|max_length[250]',
             ],
             'category' => [
                 'label' => lang('Pages.category'),
-                'rules' => 'required|in_list[' . $this->categoriesKeys . ']'
+                'rules' => 'required|in_list[' . $this->categoriesKeys . ']',
             ],
         ];
     }

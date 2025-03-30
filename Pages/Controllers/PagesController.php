@@ -2,39 +2,37 @@
 
 namespace App\Modules\Pages\Controllers;
 
+use App\Modules\Pages\Entities\Page;
+use Bonfire\Core\AdminController;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
-use Bonfire\Core\AdminController;
-use App\Modules\Pages\Entities\Page;
 
-//use CodeIgniter\Database\Exceptions\DataException;
+// use CodeIgniter\Database\Exceptions\DataException;
 
 class PagesController extends AdminController
 {
     protected $pagesFilter;
     protected $pagesModel;
     protected $adminLink;
-
-    protected $theme      = 'Admin';
-    protected $viewPrefix = 'App\Modules\Pages\Views\\';
+    protected $theme       = 'Admin';
+    protected $viewPrefix  = 'App\Modules\Pages\Views\\';
     protected $modelPrefix = 'App\Modules\Pages\Models\\';
-
 
     public function initController(
         RequestInterface $request,
         ResponseInterface $response,
-        LoggerInterface $logger
+        LoggerInterface $logger,
     ) {
         parent::initController($request, $response, $logger);
         /** user code below */
         $this->pagesFilter = model($this->modelPrefix . 'PagesFilter');
-        $this->adminLink = site_url(ADMIN_AREA . '/pages/');
+        $this->adminLink   = site_url(ADMIN_AREA . '/pages/');
     }
 
     public function list()
     {
-        if (!auth()->user()->can('pages.list')) {
+        if (! auth()->user()->can('pages.list')) {
             return redirect()->to(ADMIN_AREA)->with('error', lang('Bonfire.notAuthorized'));
         }
 
@@ -45,14 +43,13 @@ class PagesController extends AdminController
             ? $this->viewPrefix . '_table'
             : $this->viewPrefix . 'list';
 
-
         return $this->render($view, [
             'headers' => [
-                'id'            => lang('Pages.id'),
-                'title'         => lang('Pages.title'),
-                'excerpt'       => lang('Pages.excerpt'),
-                'category'      => lang('Pages.category'),
-                'updated_at'    => lang('Pages.updated'),
+                'id'         => lang('Pages.id'),
+                'title'      => lang('Pages.title'),
+                'excerpt'    => lang('Pages.excerpt'),
+                'category'   => lang('Pages.category'),
+                'updated_at' => lang('Pages.updated'),
             ],
             'showSelectAll' => true,
             'pages'         => $this->pagesFilter->paginate(setting('Site.perPage')),
@@ -60,28 +57,28 @@ class PagesController extends AdminController
         ]);
     }
 
-
     /**
      * Display the "new page" form.
      */
     public function create()
     {
-        if (!auth()->user()->can('pages.create')) {
+        if (! auth()->user()->can('pages.create')) {
             return redirect()->to($this->adminLink)->with('error', lang('Bonfire.notAuthorized'));
         }
 
         $pagesModel = model($this->modelPrefix . 'PagesModel');
         $page       = new Page();
-        //dd($page->id);
+        // dd($page->id);
         // TODO: transfer this to templates / views and make automatic
         // $viewMeta = service('viewMeta');
         // $viewMeta->setTitle('Sukurti puslapį' . ' | ' . setting('Site.siteName'));
         $this->getHugeRTE();
 
         helper('form');
+
         return $this->render($this->viewPrefix . 'form', [
-            'page' => $page,
-            'adminLink' => $this->adminLink,
+            'page'           => $page,
+            'adminLink'      => $this->adminLink,
             'pageCategories' => $pagesModel->pageCategories,
         ]);
     }
@@ -93,7 +90,7 @@ class PagesController extends AdminController
      */
     public function edit(int $pageId)
     {
-        if (!auth()->user()->can('users.edit')) {
+        if (! auth()->user()->can('users.edit')) {
             return redirect()->back()->with('error', lang('Bonfire.notAuthorized'));
         }
 
@@ -107,9 +104,10 @@ class PagesController extends AdminController
         $this->getHugeRTE();
 
         helper('form');
+
         return $this->render($this->viewPrefix . 'form', [
-            'page'   => $page,
-            'adminLink' => $this->adminLink,
+            'page'           => $page,
+            'adminLink'      => $this->adminLink,
             'pageCategories' => $pagesModel->pageCategories,
         ]);
     }
@@ -124,11 +122,11 @@ class PagesController extends AdminController
     public function save()
     {
         $pageId = $this->request->getPost('id');
-        //need this link to use in ->to instead of ->back
-        //(because it is messed up by htmx validation calls)
+        // need this link to use in ->to instead of ->back
+        // (because it is messed up by htmx validation calls)
         $currentUrl = $this->adminLink . ($pageId ?: 'new');
 
-        if (!auth()->user()->can('pages.edit')) {
+        if (! auth()->user()->can('pages.edit')) {
             return redirect()->to($currentUrl)->with('error', lang('Bonfire.notAuthorized'));
         }
 
@@ -155,11 +153,11 @@ class PagesController extends AdminController
         /** add validation rules of meta to the model */
         $validation->setRules(array_merge($pagesModel->validationRules, $page->validationRules('meta')));
 
-        //$pagesModel->checkRules();
+        // $pagesModel->checkRules();
 
         /** attempt validate */
         if (! $validation->run($page->toArray())) {
-            //dd($validation->getErrors());
+            // dd($validation->getErrors());
             return redirect()->to($currentUrl)->withInput()->with('errors', $validation->getErrors());
         }
 
@@ -168,7 +166,7 @@ class PagesController extends AdminController
             $pagesModel->save($page);
         }
 
-        if (!isset($page->id) || !is_numeric(($page->id))) {
+        if (! isset($page->id) || ! is_numeric(($page->id))) {
             $page->id = $pagesModel->getInsertID();
         }
 
@@ -184,7 +182,7 @@ class PagesController extends AdminController
      */
     public function delete(int $pageId)
     {
-        if (!auth()->user()->can('pages.delete')) {
+        if (! auth()->user()->can('pages.delete')) {
             return redirect()->back()->with('error', lang('Bonfire.notAuthorized'));
         }
 
@@ -196,13 +194,12 @@ class PagesController extends AdminController
             return redirect()->back()->with('error', lang('Bonfire.resourceNotFound', [lang('Pages.page')]));
         }
 
-        if (!$pagesModel->delete($page->id)) {
+        if (! $pagesModel->delete($page->id)) {
             return redirect()->back()->with('error', lang('Bonfire.unknownError'));
         }
 
         return redirect()->back()->with('message', lang('Bonfire.resourceDeleted', [lang('Pages.page')]));
     }
-
 
     /**
      * Deletes multiple pages from the database.
@@ -210,7 +207,7 @@ class PagesController extends AdminController
      */
     public function deleteBatch()
     {
-        if (!auth()->user()->can('pages.delete')) {
+        if (! auth()->user()->can('pages.delete')) {
             return redirect()->back()->with('error', lang('Bonfire.notAuthorized'));
         }
 
@@ -223,7 +220,7 @@ class PagesController extends AdminController
 
         $pagesModel = model($this->modelPrefix . 'PagesModel');
 
-        if (!$pagesModel->delete($ids)) {
+        if (! $pagesModel->delete($ids)) {
             return redirect()->back()->with('error', lang('Bonfire.unknownError'));
         }
 
@@ -247,12 +244,12 @@ class PagesController extends AdminController
     {
         $viewMeta = service('viewMeta');
         $viewMeta->addScript([
-            'src' => 'https://cdn.jsdelivr.net/npm/hugerte@1/hugerte.min.js',
-            'referrerpolicy' => 'origin'
+            'src'            => 'https://cdn.jsdelivr.net/npm/hugerte@1/hugerte.min.js',
+            'referrerpolicy' => 'origin',
         ]);
         $script = view('\App\Modules\Pages\Views\_hugerte', [
             'locale' => $this->request->getLocale(),
-            'url' => $this->adminLink . 'validateField/content',
+            'url'    => $this->adminLink . 'validateField/content',
         ]);
         $viewMeta->addRawScript($script);
     }

@@ -9,22 +9,17 @@ use Bonfire\Search\Interfaces\SearchProviderInterface;
 class SearchProvider extends PagesModel implements SearchProviderInterface
 {
     use SearchInMeta;
+
     /**
      * Performs a primary search for just this resource.
-     *
-     * @param string     $term
-     * @param int        $limit
-     * @param array|null $post
-     *
-     * @return array
      */
-    public function search(string $term, int $limit = 10, array $post = null): array
+    public function search(string $term, int $limit = 10, ?array $post = null): array
     {
         $query = $this->select('pages.*')->distinct();
 
         $searchInMeta = setting('Pages.includeMetaFieldsInSearech');
 
-        if (!empty($searchInMeta)) {
+        if (! empty($searchInMeta)) {
             // first argument is the resource entity name, second – the DB table name
             $query->joinMetaInfo('App\Modules\Pages\Entities\Page', 'pages');
         }
@@ -33,7 +28,7 @@ class SearchProvider extends PagesModel implements SearchProviderInterface
             ->orlike('content', $term, 'right', true, true)
             ->orLike('category', $term, 'right', true, true);
 
-        if (!empty($searchInMeta)) {
+        if (! empty($searchInMeta)) {
             foreach ($searchInMeta as $metaField) {
                 // here syntax almost exactly like that of orLike()
                 $query->orLikeInMetaInfo($metaField, $term, 'both', true, true);
@@ -47,8 +42,6 @@ class SearchProvider extends PagesModel implements SearchProviderInterface
 
     /**
      * Returns the name of the resource.
-     *
-     * @return string
      */
     public function resourceName(): string
     {
@@ -58,20 +51,16 @@ class SearchProvider extends PagesModel implements SearchProviderInterface
     /**
      * Returns a URL to the admin area URL main list
      * for this resource.
-     *
-     * @return string
      */
     public function resourceUrl(): string
     {
-        return ADMIN_AREA .'/pages';
+        return ADMIN_AREA . '/pages';
     }
 
     /**
      * Returns the name of the view to use when
      * displaying the list of results for this
      * resource type.
-     *
-     * @return string
      */
     public function resultView(): string
     {

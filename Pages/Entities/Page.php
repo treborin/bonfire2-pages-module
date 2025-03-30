@@ -25,7 +25,7 @@ class Page extends Entity
         $this->attributes['title'] = $title;
 
         // Generate slug only if it is empty or deleted by the user
-        if (!isset($this->attributes['slug']) || trim($this->attributes['slug']) === '') {
+        if (! isset($this->attributes['slug']) || trim($this->attributes['slug']) === '') {
             $this->attributes['slug'] = $this->generateSlug($title);
         }
     }
@@ -44,7 +44,7 @@ class Page extends Entity
     protected function setSlug(?string $slug): void
     {
         // If the slug is null or empty, regenerate it from the title
-        $this->attributes['slug'] = (is_null($slug) || trim($slug) === '') && isset($this->attributes['title'])
+        $this->attributes['slug'] = (null === $slug || trim($slug) === '') && isset($this->attributes['title'])
             ? $this->generateSlug($this->attributes['title'])
             : $slug;
     }
@@ -64,12 +64,12 @@ class Page extends Entity
 
     private function generateSlug(string $title): string
     {
-        $sep = '-';
+        $sep  = '-';
         $slug = mb_url_title($title, $sep, true);
 
         // Ensure slug uniqueness (this logic may require database access in a model)
         $pagesModel = model(PagesModel::class);
-        $query = $pagesModel->asArray()
+        $query      = $pagesModel->asArray()
             ->select('slug')
             ->like('slug', $slug, 'after');
 
@@ -79,10 +79,10 @@ class Page extends Entity
         }
 
         $existingSlugs = $query->findAll();
-        $flatList = array_column($existingSlugs, 'slug');
-        $i = 0;
+        $flatList      = array_column($existingSlugs, 'slug');
+        $i             = 0;
 
-        while (in_array($slug . ($i > 0 ? $sep . $i : ''), $flatList)) {
+        while (in_array($slug . ($i > 0 ? $sep . $i : ''), $flatList, true)) {
             $i++;
         }
 
