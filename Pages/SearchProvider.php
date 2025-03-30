@@ -2,6 +2,7 @@
 
 namespace App\Modules\Pages;
 
+use App\Modules\Pages\Entities\Page;
 use App\Modules\Pages\Models\PagesModel;
 use Bonfire\Core\Traits\SearchInMeta;
 use Bonfire\Search\Interfaces\SearchProviderInterface;
@@ -21,7 +22,7 @@ class SearchProvider extends PagesModel implements SearchProviderInterface
 
         if (! empty($searchInMeta)) {
             // first argument is the resource entity name, second – the DB table name
-            $query->joinMetaInfo('App\Modules\Pages\Entities\Page', 'pages');
+            $query->joinMetaInfo(Page::class, 'pages');
         }
 
         $query->like('title', $term, 'right', true, true)

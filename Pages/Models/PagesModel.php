@@ -2,13 +2,14 @@
 
 namespace App\Modules\Pages\Models;
 
+use App\Modules\Pages\Entities\Page;
 use CodeIgniter\Model;
 
 class PagesModel extends Model
 {
     protected $table          = 'pages';
     protected $primaryKey     = 'id';
-    protected $returnType     = \App\Modules\Pages\Entities\Page::class; // default array
+    protected $returnType     = Page::class; // default array
     protected $useSoftDeletes = true;
 
     // should match the categories rule in_list

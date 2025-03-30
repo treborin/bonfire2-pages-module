@@ -1,7 +1,9 @@
 <?php
 
+use CodeIgniter\Router\RouteCollection;
+
 /**
- * @var CodeIgniter\Router\RouteCollection $routes
+ * @var RouteCollection $routes
  */
 $routes->group(ADMIN_AREA, ['namespace' => 'App\Modules\Pages\Controllers'], static function ($routes) {
     //  Manage Pages

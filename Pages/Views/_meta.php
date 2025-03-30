@@ -9,19 +9,19 @@
             <?php if ($info['type'] === 'checkbox') : ?>
             <div class="form-check col-12 col-md-6 mt-3">
                 <input type="hidden"
-                    name="meta[<?= strtolower($field) ?>]"
+                    name="meta[<?= strtolower((string) $field) ?>]"
                     value="false">
                 <input type="checkbox" class="form-check-input"
-                    name="meta[<?= strtolower($field) ?>]"
+                    name="meta[<?= strtolower((string) $field) ?>]"
                     value="true"
-                    <?= set_checkbox('meta.' . strtolower($field), 'true', ($page->meta(strtolower($field))) === 'true') ?>>
+                    <?= set_checkbox('meta.' . strtolower((string) $field), 'true', ($page->meta(strtolower((string) $field))) === 'true') ?>>
                 <label for="meta[<?= $field ?>]" class="form-check-label"><?= esc($info['label']) ?></label>
             </div>
             <?php elseif ($info['type'] === 'textarea') : ?>
                 <div class="form-group col-12 col-lg-6">
                     <label for="meta[<?= $field ?>]" class="form-label"><?= esc($info['label']) ?></label>
-                    <textarea class="form-control" rows="3" name="meta[<?= strtolower($field) ?>]"
-                        ><?= old('meta[' . strtolower($field) . ']', $user->meta(strtolower($field)) ?? '') ?></textarea>
+                    <textarea class="form-control" rows="3" name="meta[<?= strtolower((string) $field) ?>]"
+                        ><?= old('meta[' . strtolower((string) $field) . ']', $user->meta(strtolower((string) $field)) ?? '') ?></textarea>
                     <?php if (has_error('meta.' . $field)) : ?>
                         <p class="text-danger"><?= error('meta.' . $field) ?></p>
                     <?php endif ?>
@@ -30,10 +30,10 @@
                 <div class="form-group col-12 col-md-6">
                     <label for="meta[<?= $field ?>]" class="form-label"><?= esc($info['label']) ?></label>
                     <input type="text"
-                        name="meta[<?= strtolower($field) ?>]"
+                        name="meta[<?= strtolower((string) $field) ?>]"
                         class="form-control"
-                        autocomplete="<?= strtolower($field) ?>"
-                        value="<?= old('meta.' . strtolower($field), $page->meta(strtolower($field)) ?: '') ?>">
+                        autocomplete="<?= strtolower((string) $field) ?>"
+                        value="<?= old('meta.' . strtolower((string) $field), $page->meta(strtolower((string) $field)) ?: '') ?>">
                     <?php if (has_error('meta.' . $field)) : ?>
                         <p class="text-danger">
                             <?= error('meta.' . $field) ?>

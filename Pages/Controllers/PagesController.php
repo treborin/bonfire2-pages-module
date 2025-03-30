@@ -2,6 +2,8 @@
 
 namespace App\Modules\Pages\Controllers;
 
+use Config\Services;
+use CodeIgniter\HTTP\RedirectResponse;
 use App\Modules\Pages\Entities\Page;
 use Bonfire\Core\AdminController;
 use CodeIgniter\HTTP\RequestInterface;
@@ -86,7 +88,7 @@ class PagesController extends AdminController
     /**
      * Display the Edit form for a single page.
      *
-     * @return \CodeIgniter\HTTP\RedirectResponse|string
+     * @return RedirectResponse|string
      */
     public function edit(int $pageId)
     {
@@ -115,7 +117,7 @@ class PagesController extends AdminController
     /**
      * Creates new or saves an edited a page.
      *
-     * @return \CodeIgniter\HTTP\RedirectResponse|void
+     * @return RedirectResponse|void
      *
      * @throws ReflectionException
      */
@@ -148,7 +150,7 @@ class PagesController extends AdminController
         /** set the post values to the object */
         $page->fill($this->request->getPost());
 
-        $validation = \Config\Services::validation();
+        $validation = Services::validation();
 
         /** add validation rules of meta to the model */
         $validation->setRules(array_merge($pagesModel->validationRules, $page->validationRules('meta')));
@@ -178,7 +180,7 @@ class PagesController extends AdminController
     /**
      * Delete the specified user.
      *
-     * @return \CodeIgniter\HTTP\RedirectResponse
+     * @return RedirectResponse
      */
     public function delete(int $pageId)
     {
@@ -233,7 +235,7 @@ class PagesController extends AdminController
     public function validateField(string $fieldName): string
     {
         $pagesModel = model($this->modelPrefix . 'PagesModel');
-        $validation = \Config\Services::validation();
+        $validation = Services::validation();
         $validation->setRules($pagesModel->getValidationRules(['only' => [$fieldName, 'id']]));
         $validation->withRequest($this->request)->run();
 

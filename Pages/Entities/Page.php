@@ -25,7 +25,7 @@ class Page extends Entity
         $this->attributes['title'] = $title;
 
         // Generate slug only if it is empty or deleted by the user
-        if (! isset($this->attributes['slug']) || trim($this->attributes['slug']) === '') {
+        if (! isset($this->attributes['slug']) || trim((string) $this->attributes['slug']) === '') {
             $this->attributes['slug'] = $this->generateSlug($title);
         }
     }
