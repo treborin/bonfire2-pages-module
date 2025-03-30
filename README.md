@@ -67,31 +67,14 @@ require you to delete the corresponding entries from admin interface and configu
     ];
     ```
 
-6. If you are using other than English language in your admin area, you will need to download
-    TinyMCE 6 language pack for your language (check [here](https://www.tiny.cloud/get-tiny/language-packages/)).
-    Download the language pack that you use and see among the community - supported ones. Extract, rename to conform to this
-    pattern (tinymce6-lt.js") (where `lt` stands for `Lithuanian`), and copy to your theme folder
-    `themes/Admin/js/`. Language code needs to correspond to the locale code of your language as defined in `app/Config/App.php`.
-
-7. Copy Pages/Config/Pages.php file to app/Config, in the copied file change the namespace declaration to `Config`
+6. Copy Pages/Config/Pages.php file to app/Config, in the copied file change the namespace declaration to `Config`
    and `use` line to `use App\Modules\Pages\Config\Pages;
 
-8. Get your own TinyMCE API key (https://www.tiny.cloud/auth/signup/), add a section to your project `.env` file with your api key:
-
-    ```env
-    #--------------------------------------------------------------------
-    # PAGES
-    #--------------------------------------------------------------------
-    pages.tinymceApiKey = 'your-api-key-goes-here'
-    ```
-
-    Without this step the page editor will be read-only.
-
-9.  To update the database, run this command from the base directory of your Codeigniter install:
+7.  To update the database, run this command from the base directory of your Codeigniter install:
 
     `php spark migrate -n App\\Modules\\Pages --all`
 
-10. And, if you wish (it is not necessary), you can populate the database with some randomly generated pages:
+And, if you wish (it is not necessary), you can populate the database with some randomly generated pages:
 
     `php spark db:seed App\\Modules\\Pages\\Database\\Seeds\\InsertSamplePages`
 
